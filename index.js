@@ -5,7 +5,7 @@ const ec = new EC('secp256k1');
 
 function getUnspentTransactions() {
     // Implementation might fetch real data from a JSON file or database
-    return JSON.parse(fs.readFileSync('./unspent.json', 'utf8'));
+    return JSON.parse(fs.readFileSync('./mempool', 'utf8'));
 }
 
 function serializeTransaction(transaction) {
@@ -35,6 +35,7 @@ function validateTransaction(transaction, unspent) {
 function readTransactions(mempoolDirectory) {
     return fs.readdirSync(mempoolDirectory).map(filename => {
         return JSON.parse(fs.readFileSync(`${mempoolDirectory}/${filename}`, 'utf8'));
+        
     }).filter(tx => validateTransaction(tx, getUnspentTransactions()));
 }
 
